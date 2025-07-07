@@ -1,0 +1,54 @@
+name: CI
+
+on: [push, workflow_dispatch]
+
+jobs:
+  check:
+    strategy:
+      matrix:
+        os: [ubuntu, macos]
+        py: [3.12, 3.13]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.py }}
+          activate-environment: true
+      - name: Install dependencies
+        run: |
+          uv sync --color always
+      - name: Check code quality
+        run: |
+          ruff format --check --diff
+          ruff check --diff
+      - uses: oven-sh/setup-bun@v2
+      - name: Check typing
+        run: |
+          bunx pyright
+  typos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: crate-ci/typos@master
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: 3.13
+      - name: Build Package
+        run: uv build
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist
+          skip-existing: true
+          print-hash: true
+          verbose: true

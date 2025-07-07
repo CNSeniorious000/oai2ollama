@@ -1,0 +1,11 @@
+__pycache__/
+*.py[oc]
+build/
+*.egg-info
+
+.venv
+/*lock*
+/*_cache
+/dist
+
+.env*

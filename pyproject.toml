@@ -1,0 +1,45 @@
+[project]
+name = "oai2ollama"
+version = "1"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi~=0.115.14",
+    "httpx[http2]~=0.28.1",
+    "pydantic-settings~=2.10.1",
+    "uvicorn-hmr~=0.0.8.0",
+]
+
+[project.scripts]
+oai2ollama = "oai2ollama:start"
+
+[build-system]
+requires = ["uv_build~=0.7.19"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-root = ""
+
+[tool.m.aliases]
+dev = "uvicorn-hmr oai2ollama:app --port 11434"
+
+[tool.ruff]
+line-length = 320
+
+[tool.ruff.lint]
+extend-select = [
+    "F",    # flake8
+    "I",    # isort
+    "N",    # pep8-naming
+    "W",    # pycodestyle
+    "UP",   # pyupgrade
+    "TRY",  # tryceratops
+    "RUF",  # ruff
+    "FURB", # refurb
+    "C4",   # flake8-comprehensions
+    "ARG",  # flake8-unused-arguments
+    "PIE",  # flake8-pie
+    "PTH",  # flake8-use-pathlib
+    "RSE",  # flake8-raise
+    "SIM",  # flake8-simplify
+    "SLF",  # flake8-self
+]
