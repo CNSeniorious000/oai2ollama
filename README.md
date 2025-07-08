@@ -42,4 +42,4 @@ docker run -it \
   oai2ollama
 ```
 
-3. Windows users can use the startup script `start.bat`. It automatically create new container to update the environments.
+3. Windows users can use the startup script `start.bat`. It automatically creates a new container to update the environment.
