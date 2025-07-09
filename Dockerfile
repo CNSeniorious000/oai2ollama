@@ -8,5 +8,5 @@ COPY . .
 
 RUN uv sync
 
-ENTRYPOINT ["oai2ollama"]
+ENTRYPOINT ["uv", "run", "oai2ollama"]
 CMD ["--help"]
