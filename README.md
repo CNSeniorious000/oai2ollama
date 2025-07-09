@@ -6,7 +6,7 @@ which is useful for providing custom models for coding agents that don't support
 
 ## Usage
 
-### User can use `uvx` or `pipx` to directly use it:
+### You can use `uvx` or `pipx` to directly use it:
 
 ```sh
 uvx oai2ollama --help
