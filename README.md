@@ -6,7 +6,9 @@ which is useful for providing custom models for coding agents that don't support
 
 ## Usage
 
-### You can use `uvx` or `pipx` to directly use it:
+### with Python
+
+You can run directly via `uvx` (if you have `uv` installed) or `pipx`:
 
 ```sh
 uvx oai2ollama --help
@@ -27,19 +29,25 @@ OPENAI_API_KEY=your_api_key
 OPENAI_BASE_URL=your_base_url
 ```
 
-### Docker Deployment
-1. Build image:
+### with Docker
+
+First, build the image:
+
 ```sh
 docker build -t oai2ollama .
 ```
 
-2. Run container:
+Then, run the container with your credentials:
+
 ```sh
-docker run -it \
-  -p 11434:11434 \
-  -e OPENAI_API_KEY=your_api_key \
-  -e OPENAI_BASE_URL=https://api-inference.modelscope.cn/v1/ \
+docker run -p 11434:11434 \
+  -e OPENAI_API_KEY="your_api_key" \
+  -e OPENAI_BASE_URL="your_base_url" \
   oai2ollama
 ```
 
-3. Windows users can use the startup script `start.bat`. It automatically creates a new container to update the environment.
+Or you can pass these as command line arguments:
+
+```sh
+docker run -p 11434:11434 oai2ollama --api-key your_api_key --base-url your_base_url
+```
