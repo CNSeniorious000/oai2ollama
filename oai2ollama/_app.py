@@ -46,3 +46,7 @@ async def chat_completions(request: Request):
             res = await client.post("/chat/completions", json=data)
             res.raise_for_status()
             return res.json()
+
+@app.get("/api/version")
+async def version():
+    return {"version": "0.11.0"}
