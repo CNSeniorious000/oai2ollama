@@ -9,14 +9,7 @@ app = FastAPI()
 def _new_client():
     from httpx import AsyncClient
 
-    return AsyncClient(
-        base_url=str(env.base_url),
-        headers={"Authorization": f"Bearer {env.api_key}"},
-        timeout=60,
-        http2=True,
-        follow_redirects=True,
-    )
-    return AsyncClient(base_url=base_url, headers={"Authorization": f"Bearer {env.api_key}"}, timeout=60, http2=True, follow_redirects=True)
+    return AsyncClient(base_url=str(env.base_url), headers={"Authorization": f"Bearer {env.api_key}"}, timeout=60, http2=True, follow_redirects=True)
 
 
 @app.get("/api/tags")
