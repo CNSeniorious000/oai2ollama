@@ -11,7 +11,7 @@ jobs:
       fail-fast: false
     runs-on: ${{ matrix.os }}-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python
         uses: astral-sh/setup-uv@v6
         with:
@@ -31,7 +31,7 @@ jobs:
   typos:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: crate-ci/typos@master
   publish:
     runs-on: ubuntu-latest
@@ -39,7 +39,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python
         uses: astral-sh/setup-uv@v6
         with:
