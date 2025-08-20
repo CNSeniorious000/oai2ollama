@@ -27,6 +27,13 @@ async def show_model():
         "capabilities": ["completion", *env.capabilities],
     }
 
+@app.get("/v1/models")
+async def list_models():
+    async with _new_client() as client:
+        res.raise_for_status()
+        res = await client.get("/models")
+        return res.json()
+
 
 @app.post("/v1/chat/completions")
 async def chat_completions(request: Request):
