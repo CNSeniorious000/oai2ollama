@@ -27,6 +27,7 @@ async def show_model():
         "capabilities": ["completion", *env.capabilities],
     }
 
+
 @app.get("/v1/models")
 async def list_models():
     async with _new_client() as client:
