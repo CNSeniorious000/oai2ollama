@@ -30,8 +30,8 @@ async def show_model():
 @app.get("/v1/models")
 async def list_models():
     async with _new_client() as client:
-        res.raise_for_status()
         res = await client.get("/models")
+        res.raise_for_status()
         return res.json()
 
 
