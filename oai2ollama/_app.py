@@ -17,7 +17,18 @@ async def models():
     async with _new_client() as client:
         res = await client.get("/models")  # Replace with the actual API endpoint
         res.raise_for_status()
-        return {"models": [{"name": i["id"], "model": i["id"]} for i in res.json()["data"]]}
+
+        # Get original models from API response
+        original_models = [{"name": i["id"], "model": i["id"]} for i in res.json()["data"]]
+
+        # Add additional models from config
+        if env.models:
+            additional_models = [{"name": model.strip(), "model": model.strip()}
+                               for model in env.models.split(",") if model.strip()]
+            original_models.extend(additional_models)
+
+        print({"models": original_models})
+        return {"models": original_models}
 
 
 @app.post("/api/show")
