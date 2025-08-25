@@ -35,7 +35,6 @@ async def models():
                 deduped_models.append(m)
                 seen.add(m["name"])
 
-        print({"models": deduped_models})
         return {"models": deduped_models}
 
 
