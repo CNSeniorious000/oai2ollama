@@ -27,8 +27,16 @@ async def models():
                                for model in env.models.split(",") if model.strip()]
             original_models.extend(additional_models)
 
-        print({"models": original_models})
-        return {"models": original_models}
+        # Deduplicate models by "name", preserving first occurrence
+        seen = set()
+        deduped_models = []
+        for m in original_models:
+            if m["name"] not in seen:
+                deduped_models.append(m)
+                seen.add(m["name"])
+
+        print({"models": deduped_models})
+        return {"models": deduped_models}
 
 
 @app.post("/api/show")
