@@ -15,9 +15,10 @@ def _new_client():
 @app.get("/api/tags")
 async def models():
     async with _new_client() as client:
-        res = await client.get("/models")  # Replace with the actual API endpoint
+        res = await client.get("/models")
         res.raise_for_status()
-        return {"models": [{"name": i["id"], "model": i["id"]} for i in res.json()["data"]]}
+        models_map = {i["id"]: {"name": i["id"], "model": i["id"]} for i in res.json()["data"]} | {i: {"name": i, "model": i} for i in env.extra_models}
+        return {"models": list(models_map.values())}
 
 
 @app.post("/api/show")

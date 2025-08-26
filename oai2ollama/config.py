@@ -14,6 +14,7 @@ class Settings(BaseSettings):
         "extra": "ignore",
         "cli_shortcuts": {
             "capabilities": "c",
+            "models": "m",
         },
     }
 
@@ -22,6 +23,7 @@ class Settings(BaseSettings):
     capacities: CliSuppress[list[Literal["tools", "insert", "vision", "embedding", "thinking"]]] = Field([], repr=False)
     capabilities: list[Literal["tools", "insert", "vision", "embedding", "thinking"]] = []
     host: str = Field("localhost", description="IP / hostname for the API server")
+    extra_models: list[str] = Field([], description="Extra models to include in the /api/tags response", alias="models")
 
     @model_validator(mode="after")
     def _warn_legacy_capacities(self: Self):
