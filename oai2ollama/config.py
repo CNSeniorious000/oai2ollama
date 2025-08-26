@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     capacities: CliSuppress[list[Literal["tools", "insert", "vision", "embedding", "thinking"]]] = Field([], repr=False)
     capabilities: list[Literal["tools", "insert", "vision", "embedding", "thinking"]] = []
     host: str = Field("localhost", description="IP / hostname for the API server")
-    models: str = Field("", description="Comma-separated list of model names to add to /api/tags")
+    models: list[str] = Field([], description="Extra models to include in the /api/tags response")
 
     @model_validator(mode="after")
     def _warn_legacy_capacities(self: Self):
