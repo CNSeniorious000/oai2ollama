@@ -60,89 +60,58 @@ async def chat_completions(request: Request):
 async def ollama_chat(request: Request):
     data = await request.json()
 
-    # Convert Ollama format to OpenAI format
+    # Base OpenAI payload
     openai_data = {
         "model": data.get("model", "default"),
         "messages": [],
-        "stream": False  # Always set to False for non-streaming
+        "stream": False,
     }
 
-    # Convert Ollama messages to OpenAI format
-    if "messages" in data:
-        for msg in data["messages"]:
-            role = msg.get("role", "user")
-            if role == "user":
-                openai_data["messages"].append({
-                    "role": "user",
-                    "content": msg.get("content", "")
-                })
-            elif role == "assistant":
-                openai_data["messages"].append({
-                    "role": "assistant",
-                    "content": msg.get("content", "")
-                })
-            elif role == "system":
-                openai_data["messages"].append({
-                    "role": "system",
-                    "content": msg.get("content", "")
-                })
+    # 1) Convert messages in one pass
+    ROLE_MAP = {"user": "user", "assistant": "assistant", "system": "system"}
+    openai_data["messages"] = [
+        {
+            "role": ROLE_MAP.get(msg.get("role"), "user"),
+            "content": msg.get("content", ""),
+        }
+        for msg in data.get("messages", [])
+    ]
 
-    # Add optional parameters
-    if "temperature" in data:
-        openai_data["temperature"] = data["temperature"]
-    if "max_tokens" in data:
-        openai_data["max_tokens"] = data["max_tokens"]
-    if "top_p" in data:
-        openai_data["top_p"] = data["top_p"]
-    if "frequency_penalty" in data:
-        openai_data["frequency_penalty"] = data["frequency_penalty"]
-    if "presence_penalty" in data:
-        openai_data["presence_penalty"] = data["presence_penalty"]
+    # 2) Bulk copy optional parameters
+    for opt in ("temperature", "max_tokens", "top_p", "frequency_penalty", "presence_penalty"):
+        if opt in data:
+            openai_data[opt] = data[opt]
 
-    # print(openai_data)
-    # Always use non-streaming approach
     async with _new_client() as client:
-        try:
-            res = await client.post("/chat/completions", json=openai_data)
-            # print(f"Response status: {res.status_code}")
-            # print(f"Response headers: {res.headers}")
+        res = await client.post("/chat/completions", json=openai_data)
+        res.raise_for_status()
+        response_json = res.json()
 
-            # Try to get response text for debugging
-            # response_text = res.text
-            # print(f"Response text: {response_text}")
-
-            res.raise_for_status()
-
-            # Parse and return JSON
-            response_json = res.json()
-
-            # Convert OpenAI response to Ollama format
-            ollama_response = {
-                "model": response_json.get("model", openai_data.get("model", "default")),
-                "created_at": response_json.get("created", 0),
-                "message": {
-                    "role": "assistant",
-                    "content": response_json.get("choices", [{}])[0].get("message", {}).get("content", "")
-                },
-                "done": True
-            }
-
-            # Add optional fields if they exist
-            if "usage" in response_json:
-                ollama_response["total_duration"] = response_json["usage"].get("total_tokens", 0) * 1000  # rough estimate
-                ollama_response["load_duration"] = 0  # not available in OpenAI response
-                ollama_response["prompt_eval_count"] = response_json["usage"].get("prompt_tokens", 0)
-                ollama_response["prompt_eval_duration"] = 0  # not available in OpenAI response
-                ollama_response["eval_count"] = response_json["usage"].get("completion_tokens", 0)
-                ollama_response["eval_duration"] = 0  # not available in OpenAI response
-
-            return ollama_response
-
-        except Exception as e:
-            print(f"Error occurred: {e}")
-            print(f"Error type: {type(e)}")
-            # Re-raise the exception to maintain the original behavior
-            raise
+        # 3) Map back to Ollama format
+        usage = response_json.get("usage", {})
+        ollama_response = {
+            "model": response_json.get("model", openai_data["model"]),
+            "created_at": response_json.get("created", 0),
+            "message": {
+                "role": "assistant",
+                "content": response_json["choices"][0]["message"]["content"],
+            },
+            "done": True,
+            # optional usage fields
+            **(
+                {
+                    "total_duration": usage.get("total_tokens", 0) * 1000,
+                    "load_duration": 0,
+                    "prompt_eval_count": usage.get("prompt_tokens", 0),
+                    "prompt_eval_duration": 0,
+                    "eval_count": usage.get("completion_tokens", 0),
+                    "eval_duration": 0,
+                }
+                if usage
+                else {}
+            ),
+        }
+        return ollama_response
 
 @app.get("/api/version")
 async def ollama_version():
