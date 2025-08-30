@@ -1,14 +1,17 @@
 import json
-import logging
 
 from fastapi import FastAPI, Request
 from fastapi.responses import StreamingResponse
 
 from .config import env
 
+# import logging
+
+
+
 # Set logging
-logging.basicConfig(level=logging.ERROR)
-logger = logging.getLogger(__name__)
+# logging.basicConfig(level=logging.ERROR)
+# logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
@@ -66,7 +69,7 @@ async def chat_completions(request: Request):
 @app.post("/api/chat")
 async def ollama_chat(request: Request):
     data = await request.json()
-    logger.debug(f"Received request: {data}")
+    # logger.debug(f"Received request: {data}")
 
     # Check if steam
     stream = data.get("stream", False)
@@ -91,7 +94,7 @@ async def ollama_chat(request: Request):
         if opt in data:
             openai_data[opt] = data[opt]
 
-    logger.debug(f"Sending to OpenAI: {openai_data}")
+    # logger.debug(f"Sending to OpenAI: {openai_data}")
 
     if stream:
         # Steam = True
@@ -142,7 +145,7 @@ async def ollama_chat(request: Request):
                 }
                 yield json.dumps(final_message) + "\n"
 
-        logger.debug("Returning streaming response")
+        # logger.debug("Returning streaming response")
         return StreamingResponse(stream_ollama_response(), media_type="application/x-ndjson")
     else:
         # Steam = False
@@ -150,7 +153,7 @@ async def ollama_chat(request: Request):
             res = await client.post("/chat/completions", json=openai_data)
             res.raise_for_status()
             response_json = res.json()
-            logger.debug(f"Received from OpenAI: {response_json}")
+            # logger.debug(f"Received from OpenAI: {response_json}")
 
             usage = response_json.get("usage", {})
             ollama_response = {
@@ -174,7 +177,7 @@ async def ollama_chat(request: Request):
                     else {}
                 ),
             }
-            logger.debug(f"Returning Ollama response: {ollama_response}")
+            # logger.debug(f"Returning Ollama response: {ollama_response}")
             return ollama_response
 
 @app.get("/api/version")
