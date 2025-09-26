@@ -17,7 +17,11 @@ async def models():
     async with _new_client() as client:
         res = await client.get("/models")
         res.raise_for_status()
-        models_map = {i["id"]: {"name": i["id"], "model": i["id"]} for i in res.json()["data"]} | {i: {"name": i, "model": i} for i in env.extra_models}
+        try:
+            data = res.json()["data"]
+        except (KeyError, TypeError):
+            data = []
+        models_map = {i["id"]: {"name": i["id"], "model": i["id"]} for i in data} | {i: {"name": i, "model": i} for i in env.extra_models}
         return {"models": list(models_map.values())}
 
 
