@@ -1,6 +1,6 @@
 [project]
 name = "oai2ollama"
-version = "1.2.6"
+version = "1.2.7"
 authors = [{ name = "Muspi Merol", email = "me@promplate.dev" }]
 requires-python = ">=3.12"
 readme = "README.md"
