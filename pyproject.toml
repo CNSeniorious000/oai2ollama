@@ -51,7 +51,7 @@ extend-select = [
 ]
 
 [dependency-groups]
-dev = ["ruff~=0.13.2"]
+dev = ["ruff~=0.14.0"]
 
 [tool.pyright]
 typeCheckingMode = "standard"
