@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://oai2ollama.vercel.app/sitemap.xml

@@ -1,0 +1,142 @@
+@keyframes fadeOutline {
+  to {
+    outline-color: transparent;
+  }
+}
+
+.md-typeset {
+  h1, h2, h3 {
+    font-weight: 300;
+  }
+  p {
+    line-height: 1.6;
+  }
+  a {
+    text-decoration: none;
+  }
+  code {
+    font-feature-settings: "calt" !important;
+  }
+  blockquote {
+    border-color: var(--md-default-fg-color--lightest) !important;
+    border-width: 0.15rem !important;
+  }
+  .admonition:not(:has(.admonition-title)) {
+    background: none;
+    border: dashed 1pt var(--md-accent-fg-color--transparent);
+  }
+  .admonition-title {
+    font-weight: 400;
+    color: hsla(var(--md-hue), 0%, 100%, 1);
+  }
+  .admonition:first-child {
+    margin-top: 0;
+    margin-bottom: 2rem;
+  }
+  .footnote-ref {
+    font-weight: 500;
+    &::before, &::after {
+      opacity: 0.5;
+      decoration: none;
+    }
+    &::before {
+      content: "[";
+      margin-right: 1pt;
+    }
+    &::after {
+      content: "]";
+      margin-left: 1pt;
+    }
+    [id^="fnref:"]:target > & {
+      outline: solid;
+      animation: fadeOutline 2s forwards;
+    }
+  }
+  .admonition.tip .admonition-title::before,
+  .admonition.danger .admonition-title::before,
+  .admonition.warning .admonition-title::before {
+    transform: translateY(-2pt);
+  }
+  .admonition.info .admonition-title::before,
+  .admonition.success .admonition-title::before {
+    transform: translateY(-1pt);
+  }
+}
+
+.md-copyright a {
+  text-decoration: none;
+}
+
+a.headerlink {
+  user-select: none;
+  h1:first-child > & {
+    display: none !important;
+  }
+}
+
+.md-footer__direction {
+  opacity: 0.4;
+}
+
+.md-source__fact.md-source__fact--version {
+  display: none;
+}
+
+.md-source__repository.md-source__repository--active {
+  font-family: var(--md-code-font-family);
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+.md-source__repository.md-source__repository--active li.md-source__fact::before {
+  width: 0.5rem;
+  transform: translateY(0.08rem);
+}
+
+a.md-source {
+  width: fit-content;
+}
+
+header.md-header {
+  background: linear-gradient(
+    to bottom,
+    var(--md-default-bg-color),
+    var(--md-default-bg-color--light)
+  );
+}
+
+.md-sidebar--primary a.md-nav__link {
+  transition: none;
+  &:not([href*="#"]):active {
+    background: var(--md-accent-fg-color) !important;
+    color: var(--md-default-bg-color) !important;
+  }
+}
+
+.md-sidebar .md-logo {
+  scale: 0.8;
+}
+
+.md-tabs__item--active {
+  font-weight: inherit;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+@media screen and (min-width: 76.2344em) {
+  label.md-nav__link, label.md-nav__title, th {
+    font-weight: 400 !important;
+    color: var(--md-default-fg-color--lighter);
+  }
+}
+
+::selection {
+  background: var(--md-accent-fg-color);
+  color: var(--md-default-bg-color);
+}
+
+:root {
+  scroll-behavior: smooth;
+}

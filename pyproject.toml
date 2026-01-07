@@ -27,6 +27,8 @@ module-root = ""
 
 [tool.m.aliases]
 dev = "uvicorn-hmr oai2ollama:app --port 11434"
+df = "deno fmt --line-width 12345 --prose-wrap preserve docs"
+z = "uv run zensical serve"
 
 [tool.ruff]
 line-length = 320
@@ -51,7 +53,7 @@ extend-select = [
 ]
 
 [dependency-groups]
-dev = ["ruff~=0.14.0"]
+dev = ["mkdocstrings-python~=2.0.1", "ruff~=0.14.0", "zensical==0.0.15"]
 
 [tool.pyright]
 typeCheckingMode = "standard"
