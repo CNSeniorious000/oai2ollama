@@ -1,6 +1,7 @@
 [project]
 name = "oai2ollama"
-version = "1.2.8"
+version = "1.2.8.1"
+description = "Wrap any OpenAI-compatible API into an Ollama-compatible API."
 authors = [{ name = "Muspi Merol", email = "me@promplate.dev" }]
 requires-python = ">=3.12"
 readme = "README.md"
@@ -13,6 +14,7 @@ dependencies = [
 ]
 
 [project.urls]
+documentation = "https://oai2ollama.vercel.app/"
 repository = "https://github.com/CNSeniorious000/oai2ollama"
 
 [project.scripts]
