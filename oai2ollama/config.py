@@ -1,9 +1,15 @@
+import re
 from os import getenv
 from sys import stderr
 from typing import Literal, Self
 
-from pydantic import Field, HttpUrl, ValidationError, model_validator
+from pydantic import Field, HttpUrl, ValidationError, field_validator, model_validator
 from pydantic_settings import BaseSettings, CliSuppress
+
+
+class InvalidContextLengthError(ValueError):
+    def __init__(self):
+        super().__init__("invalid context length")
 
 
 class Settings(BaseSettings):
@@ -15,6 +21,7 @@ class Settings(BaseSettings):
         "cli_shortcuts": {
             "capabilities": "c",
             "models": "m",
+            "context-lengths": "l",
         },
     }
 
@@ -24,6 +31,30 @@ class Settings(BaseSettings):
     capabilities: list[Literal["tools", "insert", "vision", "embedding", "thinking"]] = []
     host: str = Field("localhost", description="IP / hostname for the API server")
     extra_models: list[str] = Field([], description="Extra models to include in the /api/tags response", alias="models")
+    context_lengths: dict[str, int] = Field({}, description='Context length for specific models, e.g. {"model-name": 4096}')
+
+    @field_validator("context_lengths", mode="before")
+    @classmethod
+    def _parse_context_lengths(cls, value):
+        def _parse_context_length(value: int | str) -> int:
+            if isinstance(value, int):
+                return value
+
+            parsed = re.fullmatch(r"\s*(\d+)\s*([kKmM]?)\s*", value)
+            if not parsed:
+                raise InvalidContextLengthError
+
+            amount = int(parsed.group(1))
+            suffix = parsed.group(2).lower()
+            if suffix == "k":
+                return amount * 1000
+            if suffix == "m":
+                return amount * 1000 * 1000
+            return amount
+
+        if not isinstance(value, dict):
+            return value
+        return {k: _parse_context_length(v) for k, v in value.items()}
 
     @model_validator(mode="after")
     def _warn_legacy_capacities(self: Self):

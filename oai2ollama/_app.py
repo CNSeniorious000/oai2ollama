@@ -27,9 +27,18 @@ async def models(client=_new_client):
 
 
 @app.post("/api/show")
-async def show_model():
+async def show_model(request: Request):
+    data = await request.json()
+    model = data.get("model")
+    model_info: dict[str, str | int] = {"general.architecture": "CausalLM"}
+
+    # Add context_length if configured for this model
+    if model and model in env.context_lengths:
+        model_info["general.architecture"] = model
+        model_info[model + ".context_length"] = env.context_lengths[model]
+
     return {
-        "model_info": {"general.architecture": "CausalLM"},
+        "model_info": model_info,
         "capabilities": ["completion", *env.capabilities],
     }
 
