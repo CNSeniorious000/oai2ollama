@@ -1,15 +1,15 @@
 [project]
 name = "oai2ollama"
-version = "1.2.8.1"
+version = "1.2.8.2"
 description = "Wrap any OpenAI-compatible API into an Ollama-compatible API."
 authors = [{ name = "Muspi Merol", email = "me@promplate.dev" }]
 requires-python = ">=3.12"
 readme = "README.md"
 dependencies = [
     "dotenv-pth~=1.0.0",
-    "fastapi>=0.115.14,<0.129.0",
+    "fastapi>=0.115.14,<0.136.0",
     "httpx[http2]~=0.28.1",
-    "pydantic-settings>=2.10.1,<2.13.0",
+    "pydantic-settings>=2.10.1,<2.14.0",
     "uvicorn-hmr~=0.1.1",
 ]
 
@@ -21,7 +21,7 @@ repository = "https://github.com/CNSeniorious000/oai2ollama"
 oai2ollama = "oai2ollama:start"
 
 [build-system]
-requires = ["uv_build>=0.7,<0.10"]
+requires = ["uv_build>=0.7,<0.11"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]
@@ -55,7 +55,7 @@ extend-select = [
 ]
 
 [dependency-groups]
-dev = ["mkdocstrings-python~=2.0.1", "ruff~=0.14.0", "zensical==0.0.15"]
+dev = ["mkdocstrings-python~=2.0.1", "ruff~=0.15.7", "zensical==0.0.29"]
 
 [tool.pyright]
 typeCheckingMode = "standard"
