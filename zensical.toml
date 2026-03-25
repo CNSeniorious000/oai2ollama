@@ -41,7 +41,7 @@ logo = "lucide/blend"
 
 [project.theme.font]
 text = "Armata"
-code = "Jetbrains Mono"
+code = "JetBrains Mono"
 
 [[project.theme.palette]]
 media = "(prefers-color-scheme: dark)"
