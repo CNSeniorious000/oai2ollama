@@ -1,6 +1,6 @@
 [project]
 name = "oai2ollama"
-version = "1.2.8.3"
+version = "1.2.8.4"
 description = "Wrap any OpenAI-compatible API into an Ollama-compatible API."
 authors = [{ name = "Muspi Merol", email = "me@promplate.dev" }]
 requires-python = ">=3.12"
